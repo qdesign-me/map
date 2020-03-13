@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="still-loading">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap&subset=cyrillic-ext" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.min.css">
+</head>
+
+<body>
+    <script src="js/jquery.js"></script>
+    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+    <script src="js/scripts.js"></script>
+    <div class="flex fullscreen">
+        <div class="results">
+            <div class="items"></div>
+        </div>
+        <div id="map"></div>
+        <div class="filters">
+            <div class="it">
+                <select name="filter1">
+                    <option></option>
+                    <option>Минск</option>
+                    <option>Брест</option>
+                    <option>Гродно</option>
+                    <option>Орша</option>
+                </select>
+            </div>
+            <div class="it">
+                <select name="filter2">
+                    <option></option>
+                    <option>Красный</option>
+                    <option>Белый</option>
+                    <option>Зеленый</option>
+                    <option>Оранжевый</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <script>
+        var placemarks = [];
+    var data =  [
+            { id: 0, filters: { filter1: 'Минск', filter2: 'Красный' },  "coordinates": [55.831903, 37.411961], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>Klimaschutz in Vorpommern – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 1,  filters: { filter1: 'Брест', filter2: 'Красный' }, "coordinates": [55.763338, 37.565466], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>22222  – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 2,  filters: { filter1: 'Брест', filter2: 'Красный' },"coordinates": [55.716733, 37.589988], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>333333 33333 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 3,  filters: { filter1: 'Гродно', filter2: 'Красный' },"coordinates": [55.822144, 37.433781], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>K44444 44 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 4,  filters: { filter1: 'Минск', filter2: 'Красный' },"coordinates": [55.78085, 37.75021], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>233213213 21321 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 5,  filters: { filter1: 'Орша', filter2: 'Красный' },"coordinates": [55.865386, 37.713329], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>564632432 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 6,  filters: { filter1: 'Минск', filter2: 'Красный' },"coordinates": [55.847121, 37.525797], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>6576554 342 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 7,  filters: { filter1: 'Минск', filter2: 'Красный' },"coordinates": [55.778655, 37.710743], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>xc cxzczxc – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 8,  filters: { filter1: 'Минск', filter2: 'Белый' },"coordinates": [55.623415, 37.717934], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>vcx vcx45432 – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 9,  filters: { filter1: 'Минск', filter2: 'Зеленый' },"coordinates": [55.863193, 37.737], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>dsdas dsadsaaa – von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+            { "id": 10,  filters: { filter1: 'Минск', filter2: 'Оранжевый' },"coordinates": [55.698261, 37.730838], "html": "<div class='event-item'><img src='https://statimg2.cdnbb8.com/files/image/deal/171105/bb4_deal_small@2x/5ba0f096223afa55bf5b1a23f0da04ff.jpeg?850d645eea8c6a039c31794d49e1c0be' /><div class='name'>1122442221– von der Einöde zum kulturellen Kleinod <span>Greifswald Wettbewerb</span><small>Land schreibt Zukunft</small></div> <a href='#'><i class='fas fa-caret-right'></i> Подробнее</a>"},
+
+        ];
+
+
+
+
+    ymaps.ready(init);
+
+
+    function init() {
+        var myMap = new ymaps.Map('map', {
+                center: [55.76, 37.64],
+                zoom: 10
+            }, {
+
+            });
+
+        myMap.controls.add('zoomControl', {size: 'small', position: {left: '10px', top: '10px'}});
+
+
+
+            var clusterer = new ymaps.Clusterer({
+
+                preset: 'islands#invertedVioletClusterIcons',
+                groupByCoordinates: false,
+                clusterDisableClickZoom: true,
+                clusterHideIconOnBalloonOpen: false,
+                geoObjectHideIconOnBalloonOpen: false
+            });
+             clusterer.options.set({
+            gridSize: 80,
+            clusterDisableClickZoom: true
+        });
+
+             data.forEach(function(it){
+                $('.results .items').html($('.results .items').html() + it.html);
+
+
+                placemarks.push(new ymaps.Placemark(
+                  it.coordinates,{
+                    balloonContentBody: it.html,
+                    clusterCaption: 'метка <strong>' + it.id + '</strong>'
+                  },{}));
+
+
+            })
+
+                clusterer.add(placemarks);
+        myMap.geoObjects.add(clusterer);
+
+        /**
+         * Спозиционируем карту так, чтобы на ней были видны все объекты.
+         */
+
+        myMap.setBounds(clusterer.getBounds(), {
+            checkZoomRange: true
+        });
+
+      //  objectManager.add(placemarks);
+      //  myMap.geoObjects.add(objectManager);
+
+
+
+
+
+
+        $('select').change(function() {
+
+
+                data.forEach(function(it){
+                    var show=true;
+                    $('select').each(function(key, select){
+
+                        var val = $(select).val();
+                        var name = $(select).attr('name');
+                        console.log(name, val)
+                        if(val && it.filters && it.filters[name] && it.filters[name]!=val) show=false
+                    })
+                    if(show){
+                        $('.results .event-item').eq(it.id).show();
+                                                clusterer.add(placemarks[it.id]);
+
+                    }else{
+                        $('.results .event-item').eq(it.id).hide();
+                        clusterer.remove(placemarks[it.id]);
+                    }
+
+                })
+
+        })
+
+         $(document).on('click', '.results .event-item', function(){
+
+
+                 placemarks[$(this).index()].events.fire('click', {});
+         }
+         )
+
+    }
+    </script>
+</body>
+
+</html>
